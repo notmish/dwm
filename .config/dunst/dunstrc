@@ -1,0 +1,38 @@
+[global]
+    monitor = 0
+    follow = mouse
+
+    width = 320
+    height = 180
+    offset = 12x40
+    origin = top-right
+
+    font = JetBrains Mono 9
+    frame_width = 1
+    separator_height = 1
+
+    transparency = 10
+    corner_radius = 0
+
+    idle_threshold = 120
+
+    # makes it feel more "floating dark panel"
+    frame_color = "#1f1f1f"
+
+[urgency_low]
+    background = "#0f0f0f"
+    foreground = "#777777"
+    timeout = 3
+    frame_color = "#1a1a1a"
+
+[urgency_normal]
+    background = "#0f0f0f"
+    foreground = "#e0e0e0"
+    timeout = 5
+    frame_color = "#2a2a2a"
+
+[urgency_critical]
+    background = "#120000"
+    foreground = "#ff5555"
+    timeout = 0
+    frame_color = "#ff5555"
