@@ -1,4 +1,5 @@
 7zip
+brightnessctl
 btop
 dmenu
 dunst
