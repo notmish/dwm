@@ -91,7 +91,7 @@ startx
 
 ---
 
-### I'm a startx guy so I use xinit. if you use things like SDDM or others make sure to copy the lines inside .xinitrc to your .xsessionrc and .xprofiles
+### I'm a startx guy so I use xinit. if you use things like SDDM or others make sure to copy the lines inside .xinitrc to your .xsession and .xprofile
 
 ## ⌨️ Keybindings
 
