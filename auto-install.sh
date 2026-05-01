@@ -20,18 +20,6 @@ ask() {
 }
 
 ########################################
-# Keep sudo alive
-########################################
-sudo -v
-while true; do sudo -n true; sleep 60; done 2>/dev/null &
-SUDO_KEEPALIVE_PID=$!
-
-cleanup() {
-    kill "$SUDO_KEEPALIVE_PID" 2>/dev/null || true
-}
-trap cleanup EXIT
-
-########################################
 # Start
 ########################################
 clear
@@ -100,6 +88,7 @@ fi
 ########################################
 log "Copying dotfiles to home directory..."
 
+cd ~/dwm
 cp -rv .config/* "$HOME/.config/"
 cp -rv suckless "$HOME/.config/"
 cp -rv Wallpaper "$HOME/"
@@ -113,6 +102,7 @@ log "Dotfiles copied successfully."
 # Install packages
 ########################################
 log "Installing pacman packages..."
+cd ~/dwm
 sudo pacman -S --needed --noconfirm - < pkglist.txt
 
 log "Installing AUR packages..."
