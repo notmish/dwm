@@ -159,6 +159,16 @@ startx
 
 ---
 
+### Screenshot
+
+
+| Key | Action |
+|-----|--------|
+| `Mod + Print` | Fullscreen screenshot |
+| `Mod + Shift + Print` | Selective area screenshot |
+
+---
+
 ## 📝 Notes
 
 - Check configs in `~/.config` if something breaks  
