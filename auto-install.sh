@@ -62,18 +62,33 @@ else
     if ask "Do you want to install yay?"; then
         log "Installing yay..."
 
-        TEMP_DIR="/tmp/yay-build"
-        rm -rf "$TEMP_DIR"
+        set -euo pipefail
 
-        sudo pacman -S --noconfirm base-devel git
-        git clone https://aur.archlinux.org/yay.git "$TEMP_DIR"
+        TEMP_DIR="$(mktemp -d)"
+        trap 'rm -rf "$TEMP_DIR"' EXIT
+
+        # Ensure required packages are installed
+        sudo pacman -S --needed --noconfirm base-devel git
+
+        # Clone repo safely
+        if ! git clone https://aur.archlinux.org/yay.git "$TEMP_DIR"; then
+            echo "❌ Failed to clone yay repository."
+            exit 1
+        fi
+
         cd "$TEMP_DIR"
-        makepkg -si --noconfirm
 
-        cd -
-        rm -rf "$TEMP_DIR"
+        # Build and install
+        if makepkg -si --noconfirm; then
+            log "yay installed successfully."
+        else
+            echo "❌ Failed to build/install yay."
+            exit 1
+        fi
 
-        log "yay installed and temporary files cleaned."
+        cd ~
+
+        log "Temporary files cleaned."
     else
         echo "❌ yay is required. Exiting."
         exit 1
