@@ -98,10 +98,10 @@ log "Dotfiles copied successfully."
 # Install packages
 ########################################
 log "Installing pacman packages..."
-sudo pacman -S --needed - < pkglist.txt
+sudo pacman -S --needed --noconfirm - < pkglist.txt
 
 log "Installing AUR packages..."
-yay -S --needed - < aurlist.txt
+yay -S --needed --noconfirm - < aurlist.txt
 
 ########################################
 # Build suckless programs
