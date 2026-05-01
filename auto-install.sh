@@ -131,12 +131,6 @@ else
     log "Using startx (.xinitrc setup)..."
 fi
 
-########################################
-# Final steps
-########################################
-log "Applying X resources..."
-xrdb "$HOME/.Xresources" || true
-
 log "Setup complete!"
 echo ""
 echo "✅ You can now start DWM using:"
