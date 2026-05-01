@@ -121,7 +121,7 @@ cd "$HOME"
 ########################################
 log "Session setup selection"
 
-if ask "Do you want to use SDDM instead of startx?"; then
+if ask "Do you want to use SDDM instead of startx(if yes then you have to add dwm mannually as sddm don't auto setup it) ?"; then
     log "Configuring SDDM (.xprofile setup)..."
 
     cp -v "$HOME/.xinitrc" "$HOME/.xprofile"
