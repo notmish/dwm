@@ -23,6 +23,7 @@ unrar
 unzip
 vim
 xdg-user-dirs
+xclip
 xorg-server
 xorg-xinit
 xorg-xrandr
