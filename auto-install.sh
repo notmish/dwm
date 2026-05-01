@@ -65,6 +65,7 @@ else
         TEMP_DIR="/tmp/yay-build"
         rm -rf "$TEMP_DIR"
 
+        sudo pacman -S --noconfirm base-devel git
         git clone https://aur.archlinux.org/yay.git "$TEMP_DIR"
         cd "$TEMP_DIR"
         makepkg -si --noconfirm
