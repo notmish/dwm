@@ -9,7 +9,9 @@ A minimal, clean and fast **Arch Linux + DWM** setup.
 Before using this setup, make sure you have:
 
 - Arch Linux installed (**minimal install recommended via archinstall**)
-- `yay` installed (AUR helper)
+- `yay` installed (AUR helper)[Optional]
+- extra Repository must be enabled due to avoiding AUR!
+- bibata-cursor-theme [If not wanna install using AUR. If you install yay then you can skip it.]
 - Minimal Xorg setup (`xorg`, `xinit`)
 - Required drivers installed manually:
   - GPU (Intel / AMD / NVIDIA)
@@ -65,7 +67,7 @@ cp .xinitrc ~/
 
 ```bash
 sudo pacman -S --needed - < pkglist.txt
-yay -S --needed - < aurlist.txt
+yay -S --needed - < aurlist.txt [Must Avoid if you dont want AUR]
 ```
 
 ---
