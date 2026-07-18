@@ -68,7 +68,7 @@ cp .xinitrc ~/
 ```bash
 sudo pacman -S --needed - < pkglist.txt
 ```
-[Optional for Bibata-cursor-theme]
+[Optional 👇 for Bibata-cursor-theme]
 ```
 yay -S --needed - < aurlist.txt
 ```
