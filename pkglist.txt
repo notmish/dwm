@@ -1,4 +1,5 @@
 7zip
+base-devel
 brightnessctl
 btop
 dmenu
@@ -11,6 +12,7 @@ kitty
 lsd
 lxappearance
 maim
+make
 materia-gtk-theme
 papirus-icon-theme
 picom
