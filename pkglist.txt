@@ -17,6 +17,7 @@ picom
 thunar
 thunar-archive-plugin
 ttf-jetbrains-mono
+ttf-jetbrains-mono-nerd
 tumbler
 udisks2
 unrar
