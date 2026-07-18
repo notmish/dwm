@@ -1,2 +1,1 @@
 bibata-cursor-theme-bin
-ttf-jetbrains-mono-nerd
