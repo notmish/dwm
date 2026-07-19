@@ -132,7 +132,6 @@ startx
 | Key | Action |
 |-----|--------|
 | `Mod + Up / Down` | Resize master area |
-| `Mod + i / d` | Increase / decrease master windows |
 | Layouts | `Tile`, `Floating`, `Monocle` |
 
 ---
