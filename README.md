@@ -217,3 +217,4 @@ startx
 ## ⭐ Credits
 
 - https://suckless.org/
+- https://github.com/ful1e5/Bibata_Cursor
