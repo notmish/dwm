@@ -186,6 +186,34 @@ startx
 
 ---
 
+
+## Mouse Cursor Theme (If you din't installed yay)
+
+- cd into the ~/Downloads folder
+  ```bash
+  cd ~/Downloads
+  ```
+- copy the latest Bibata_Cursor
+  ```bash
+  curl -LO https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/Bibata-Modern-Ice.tar.xz
+  ```
+- create the icons folder
+  ```bash
+  mkdir -p ~/.local/share/icons
+  ```
+- ectract them to their intended icons folders
+  ```bash
+  tar -xvf Bibata-Modern-Ice.tar.xz -C ~/.local/share/icons/
+  ```
+  ```bash
+  sudo tar -xvf Bibata-Modern-Ice.tar.xz -C /usr/share/icons/
+  ```
+- reboot the system
+  ```bash
+  reboot
+  ```
+---
+
 ## ⭐ Credits
 
 - https://suckless.org/
