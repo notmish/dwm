@@ -1,144 +1,73 @@
 #!/usr/bin/env bash
-
+#
+# Arch Linux dwm setup (official repositories only, no AUR).
+# Run as a regular user:  bash auto-install.sh
+#
 set -euo pipefail
 
-########################################
-# Safety: exit on error anywhere
-########################################
-trap 'echo "❌ Error occurred. Exiting..."; exit 1' ERR
+REPO_URL="https://github.com/notmish/dwm.git"
+CURSOR_URL="https://github.com/ful1e5/Bibata_Cursor/releases/latest/download/Bibata-Modern-Ice.tar.xz"
 
-########################################
-# Helper functions
-########################################
-log() {
-    echo -e "\n[INFO] $1"
-}
+PACKAGES=(
+    # toolchain and libraries needed to build dwm / slstatus
+    base-devel git curl libx11 libxinerama libxft
+    # X11 session
+    xorg-server xorg-xinit xorg-xrandr xorg-xrdb
+    # desktop
+    dmenu kitty picom dunst libnotify xwallpaper maim xclip brightnessctl
+    # audio (volume keys use wpctl)
+    pipewire pipewire-alsa pipewire-pulse wireplumber
+    # file manager and archive support
+    thunar thunar-archive-plugin file-roller gvfs tumbler ffmpegthumbnailer
+    udisks2 xdg-user-dirs 7zip unrar unzip
+    # appearance
+    materia-gtk-theme papirus-icon-theme lxappearance
+    ttf-jetbrains-mono ttf-jetbrains-mono-nerd
+    # command-line tools
+    btop fastfetch lsd vim cmatrix
+)
 
-ask() {
-    read -rp "$1 (y/n): " choice
-    [[ "$choice" =~ ^[Yy]$ ]]
-}
+log() { printf '\n\033[1;34m==>\033[0m %s\n' "$*"; }
+die() { printf '\033[1;31merror:\033[0m %s\n' "$*" >&2; exit 1; }
+trap 'die "failed at line $LINENO - fix the problem and re-run (the script is safe to repeat)"' ERR
 
-########################################
-# Start
-########################################
-clear
-log "Starting Arch dotfiles setup..."
+[[ $EUID -ne 0 ]] || die "run as a regular user, not root (sudo is used where needed)"
+command -v pacman >/dev/null || die "pacman not found - this script is for Arch Linux"
 
-########################################
-# Post-install check
-########################################
-log "Before continuing, ensure you have:"
-echo "- Installed Arch base system"
-echo "- Installed GPU / drivers / touchpad / wifi etc."
-echo "- Installed xorg + xinit (if using startx)"
-echo ""
+log "Requesting sudo access"
+sudo -v
 
-if ! ask "Have you completed post-install setup (drivers, xorg, etc.)?"; then
-    echo "❌ Please complete post-install setup first."
-    exit 0
+log "Installing packages"
+sudo pacman -Syu --needed --noconfirm "${PACKAGES[@]}"
+
+# Use the repo next to this script; if it is not there, clone it.
+SRC="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-.}")" && pwd)"
+if [[ ! -d $SRC/suckless ]]; then
+    log "Cloning $REPO_URL"
+    SRC="$(mktemp -d)"
+    trap 'rm -rf "$SRC"' EXIT
+    git clone --depth 1 "$REPO_URL" "$SRC"
 fi
 
-########################################
-# yay check
-########################################
-if command -v yay >/dev/null 2>&1; then
-    log "yay is already installed."
-else
-    log "yay not found."
+log "Installing configuration files (replaced files are backed up, not lost)"
+cp -rT --backup=numbered "$SRC/.config" "$HOME/.config"
+cp --backup=numbered -t "$HOME" "$SRC/.bashrc" "$SRC/.xinitrc" "$SRC/.Xresources"
+cp -rT "$SRC/Wallpaper" "$HOME/Wallpaper"
+[[ ! -e $HOME/.config/suckless ]] || mv "$HOME/.config/suckless" "$HOME/.config/suckless.bak.$(date +%s)"
+cp -r "$SRC/suckless" "$HOME/.config/suckless"
 
-    if ask "Do you want to install yay?"; then
-        log "Installing yay..."
+log "Installing Bibata-Modern-Ice cursor theme"
+mkdir -p "$HOME/.local/share/icons"
+curl -fsSL "$CURSOR_URL" | tar -xJ -C "$HOME/.local/share/icons"
 
-        set -euo pipefail
+for prog in dwm slstatus; do
+    log "Building and installing $prog"
+    make -C "$HOME/.config/suckless/$prog" clean all
+    sudo make -C "$HOME/.config/suckless/$prog" install
+done
 
-        TEMP_DIR="$(mktemp -d)"
-        trap 'rm -rf "$TEMP_DIR"' EXIT
+log "Finishing up"
+xdg-user-dirs-update
+sudo usermod -aG video "$(id -un)"
 
-        # Ensure required packages are installed
-        sudo pacman -S --needed --noconfirm base-devel git
-
-        # Clone repo safely
-        if ! git clone https://aur.archlinux.org/yay.git "$TEMP_DIR"; then
-            echo "❌ Failed to clone yay repository."
-            exit 1
-        fi
-
-        cd "$TEMP_DIR"
-
-        # Build and install
-        if makepkg -si --noconfirm; then
-            log "yay installed successfully."
-        else
-            echo "❌ Failed to build/install yay."
-            exit 1
-        fi
-
-        cd ~
-
-        log "Temporary files cleaned."
-    else
-        echo "❌ yay is required. Exiting."
-        exit 1
-    fi
-fi
-
-########################################
-# Copy dotfiles
-########################################
-log "Copying dotfiles to home directory..."
-
-cd ~/dwm
-cp -rv .config/* "$HOME/.config/"
-cp -rv suckless "$HOME/.config/"
-cp -rv Wallpaper "$HOME/"
-cp -v .Xresources "$HOME/"
-cp -v .bashrc "$HOME/"
-cp -v .xinitrc "$HOME/"
-
-log "Dotfiles copied successfully."
-
-########################################
-# Install packages
-########################################
-log "Installing pacman packages..."
-cd ~/dwm
-sudo pacman -S --needed --noconfirm - < pkglist.txt
-
-log "Installing AUR packages..."
-yay -S --needed --noconfirm - < aurlist.txt
-
-########################################
-# Build suckless programs
-########################################
-log "Building DWM..."
-cd "$HOME/.config/suckless/dwm"
-sudo make clean install
-
-log "Building slstatus..."
-cd "$HOME/.config/suckless/slstatus"
-sudo make clean install
-
-cd "$HOME"
-
-########################################
-# Session setup choice
-########################################
-log "Session setup selection"
-
-if ask "Do you want to use SDDM instead of startx(if yes then you have to add dwm mannually as sddm don't auto setup it) ?"; then
-    log "Configuring SDDM (.xprofile setup)..."
-
-    cp -v "$HOME/.xinitrc" "$HOME/.xprofile"
-
-    log ".xinitrc copied to .xprofile for SDDM compatibility."
-else
-    log "Using startx (.xinitrc setup)..."
-fi
-
-log "Setup complete!"
-echo ""
-echo "✅ You can now start DWM using:"
-echo "   startx"
-echo ""
-echo "Enjoy your setup."
+log "Done. Reboot, log in on a TTY and run: startx"
