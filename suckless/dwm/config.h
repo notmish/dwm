@@ -7,6 +7,11 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrains Mono Nerd Font:size=12"};
 static const char dmenufont[]       = "JetBrains Mono Nerd Font:size=12";
+static const unsigned int systraypinning = 0;
+static const unsigned int systrayonleft = 0;
+static const unsigned int systrayspacing = 5;
+static const int systraypinningfailfirst = 1;
+static const int showsystray = 1;
 
 /* color schemes */
 static const char *colors[][3] = {
