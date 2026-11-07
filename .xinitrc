@@ -1,4 +1,4 @@
-xwallpaper --zoom ~/Wallpaper/dark.jpg
+xwallpaper --zoom ~/Wallpaper/natureoffear.png
 xrdb ~/.Xresources
 slstatus &
 picom &
