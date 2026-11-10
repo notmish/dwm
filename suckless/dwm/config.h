@@ -13,11 +13,20 @@ static const unsigned int systrayspacing = 5;
 static const int systraypinningfailfirst = 1;
 static const int showsystray = 1;
 
-/* color schemes */
+/* color scheme: soft monochrome, Materia Dark inspired.
+ * Deliberately avoids pure #000000 / #ffffff to cut glare and halation:
+ * normal text ~9.6:1 contrast, selected text ~8.7:1 (easy on the eyes). */
+static const char col_bg[]         = "#212121";  /* bar / window background (Materia Dark base) */
+static const char col_fg[]         = "#c8c8c8";  /* normal text, soft light gray */
+static const char col_border[]     = "#3a3a3a";  /* unfocused window border */
+static const char col_sel_bg[]     = "#424242";  /* selected tag / title / dmenu highlight */
+static const char col_sel_fg[]     = "#eeeeee";  /* selected text */
+static const char col_sel_border[] = "#9e9e9e";  /* focused window border */
+
 static const char *colors[][3] = {
-    /*               fg         bg         border   */
-    [SchemeNorm] = { "#E0E0E0", "#000000", "#333333" },  // white on black
-    [SchemeSel]  = { "#000000", "#B8B8B8", "#B8B8B8" },  // black on white (selected)
+    /*               fg          bg          border         */
+    [SchemeNorm] = { col_fg,     col_bg,     col_border     },
+    [SchemeSel]  = { col_sel_fg, col_sel_bg, col_sel_border },
 };
 
 /* tagging */
@@ -65,10 +74,10 @@ static const char *dmenucmd[] = {
     "-m", dmenumon,
     "-fn", dmenufont,
 
-    "-nb", "#000000", 
-    "-nf", "#E0E0E0",
-    "-sb", "#B8B8B8",
-    "-sf", "#000000",
+    "-nb", col_bg,
+    "-nf", col_fg,
+    "-sb", col_sel_bg,
+    "-sf", col_sel_fg,
 
     NULL
 };
